@@ -1,6 +1,6 @@
 new_service:
 	# TODO: SERVICE_NAME validation
-	cp -r ./template ./$(SERVICE_NAME)
+	cp -r ./.template ./$(SERVICE_NAME)
 	echo "service $(SERVICE_NAME) created"
 
 build:
