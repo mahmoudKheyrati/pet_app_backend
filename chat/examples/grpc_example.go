@@ -13,7 +13,7 @@ type GreaterService struct {
 }
 
 func (g *GreaterService) SayHello(ctx context.Context, request *proto.HelloRequest) (*proto.HelloReply, error) {
-	log.Println(request.Name)
+	log.Println("server request.Name:", request.Name)
 	return &proto.HelloReply{Message: "Hello " + request.Name}, nil
 }
 
@@ -41,4 +41,26 @@ func GrpcServerExample() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func GrpcClientExample() {
+	// grpc client example
+	conn, err := grpc.Dial(":8050", grpc.WithInsecure())
+	if err != nil {
+		panic(err)
+	}
+	defer func(conn *grpc.ClientConn) {
+		err := conn.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(conn)
+
+	client := proto.NewGreaterClient(conn)
+	request := proto.HelloRequest{Name: "Mahmoud"}
+	response, err := client.SayHello(context.Background(), &request)
+	if err != nil {
+		panic(err)
+	}
+	log.Println("client response.Name:", response.Message)
 }
